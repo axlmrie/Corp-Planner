@@ -1,7 +1,6 @@
 package fr.axel.corpplanner.user;
 
 
-import fr.axel.corpplanner.user.domain.Permission;
 import fr.axel.corpplanner.user.domain.Role;
 import fr.axel.corpplanner.user.domain.User;
 import fr.axel.corpplanner.user.dto.UserResponse;
@@ -45,24 +44,16 @@ public class UserService {
     }
     public UserResponse mapToResponse(User user) {
         Set<String> roles = user.getRoles().stream()
-                .map(Role::getName)
+                .map(Role::name)
                 .collect(Collectors.toSet());
 
-        Set<String> permissions = user.getRoles().stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .map(Permission::getName)
-                .collect(Collectors.toSet());
 
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),
                 roles,
-                permissions,
-                user.getPicture(),
-                user.getCompanyName(),
                 user.getFirstName(),
-                user.getLastName(),
-                user.getJobTitle()
+                user.getLastName()
         );
     }
 
