@@ -19,19 +19,15 @@ public class VerificationService {
 
     @Transactional
     public String createToken(User user, TokenType type) {
-        // 1. Nettoyage des anciens tokens du même type pour ce user
         tokenRepository.deleteByUserIdAndType(user.getId(), type);
 
-        // 2. Génération du code 6 chiffres
         String code = String.format("%06d", new Random().nextInt(999999));
 
-        // 3. Sauvegarde (Expiration : 15 min pour reset, 24h pour activation)
         int minutes = (type == TokenType.PASSWORD_RESET) ? 15 : 1440;
 
         VerificationToken vt = VerificationToken.builder()
                 .token(code)
                 .type(type)
-                .user(user)
                 .expiryDate(LocalDateTime.now().plusMinutes(minutes))
                 .build();
 

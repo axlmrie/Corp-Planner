@@ -10,9 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ResourceService {
@@ -23,7 +20,6 @@ public class ResourceService {
         if (type != null) {
             return resourceRepository.findAllByTypeAndActiveTrue(type, pageable);
         }
-        // CORRECTION : On ne renvoie que les actifs, même sans filtre de type
         return resourceRepository.findAllByActiveTrue(pageable);
     }
 
@@ -32,22 +28,20 @@ public class ResourceService {
                 .orElseThrow(() -> new EntityNotFoundException("Resource not found with id: " + id));
     }
 
-    // On prend un DTO en entrée, on sauvegarde une Entity
     public Resource create(ResourceRequest request) {
         Resource resource = Resource.builder()
                 .name(request.name())
                 .type(request.type())
                 .capacity(request.capacity())
                 .location(request.location())
-                .active(true) // On force l'actif à la création
+                .active(true)
                 .build();
         return resourceRepository.save(resource);
     }
 
     public Resource update(Long id, ResourceRequest request) {
-        Resource existing = findById(id); // Lèvera l'exception 404 si pas trouvé
+        Resource existing = findById(id);
 
-        // Mise à jour manuelle (ou via MapStruct plus tard)
         existing.setName(request.name());
         existing.setType(request.type());
         existing.setCapacity(request.capacity());
@@ -57,7 +51,7 @@ public class ResourceService {
     }
 
     public void delete(Long id) {
-        Resource resource = findById(id); // Vérifie que ça existe avant
+        Resource resource = findById(id);
         resource.setActive(false);
         resourceRepository.save(resource);
     }

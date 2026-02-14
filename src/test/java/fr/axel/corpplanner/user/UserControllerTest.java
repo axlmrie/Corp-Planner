@@ -3,7 +3,6 @@ package fr.axel.corpplanner.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.axel.corpplanner.user.domain.User;
 import fr.axel.corpplanner.user.dto.UserUpdateRequest;
-import fr.axel.corpplanner.user.repository.RoleRepository;
 import fr.axel.corpplanner.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,6 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private UserRepository userRepository;
