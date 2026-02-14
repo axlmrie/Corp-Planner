@@ -44,8 +44,6 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .jobTitle(request.getJobTitle())
-                .companyName(request.getCompanyName())
                 .roles(new java.util.HashSet<>(java.util.Set.of(defaultRole)))
                 .enabled(false)
                 .build();
