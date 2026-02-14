@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Spring Boot & Secrets ###
+
+src/main/resources/*.properties
