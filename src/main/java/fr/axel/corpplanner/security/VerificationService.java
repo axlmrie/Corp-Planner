@@ -28,6 +28,7 @@ public class VerificationService {
         VerificationToken vt = VerificationToken.builder()
                 .token(code)
                 .type(type)
+                .user(user)
                 .expiryDate(LocalDateTime.now().plusMinutes(minutes))
                 .build();
 

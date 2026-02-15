@@ -14,7 +14,4 @@ public class RegisterRequest {
     private String password;
     private String firstName;
     private String lastName;
-    private String jobTitle;
-    private String companyName;
-    private String picture;
 }
