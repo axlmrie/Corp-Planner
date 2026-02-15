@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -21,4 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             @Param("resourceId") Long resourceId,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
-    );}
+    );
+
+    List<Booking> findAllByUser_Id(Long userId);
+}

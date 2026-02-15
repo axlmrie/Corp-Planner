@@ -45,15 +45,15 @@ public class AuthenticationService {
                 .enabled(false)
                 .build();
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        String code = verificationService.createToken(user, TokenType.ACTIVATION);
+        String code = verificationService.createToken(savedUser, TokenType.ACTIVATION);
+
         String htmlContent = "<h2>Bienvenue !</h2><p>Votre code d'activation est : <b>" + code + "</b></p>";
-        emailService.send(user.getEmail(), "Activation de votre compte", htmlContent);
+        emailService.send(savedUser.getEmail(), "Activation de votre compte", htmlContent);
 
         return "Compte créé. Veuillez l'activer avec le code envoyé par e-mail.";
     }
-
 
     @Transactional
     public void confirmActivation(String code) {

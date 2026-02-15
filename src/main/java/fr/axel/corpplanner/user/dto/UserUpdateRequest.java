@@ -7,9 +7,6 @@ import java.util.Set;
 public class UserUpdateRequest {
     private String email;
     private Set<String> roles;
-    private Set<String> companies;
     private String firstName;
     private String lastName;
-    private String jobTitle;
-    private String companyName;
 }
