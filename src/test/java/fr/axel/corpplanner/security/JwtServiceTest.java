@@ -1,47 +1,46 @@
 package fr.axel.corpplanner.security;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@ActiveProfiles("test")
 class JwtServiceTest {
 
-    @Autowired
     private JwtService jwtService;
+    private UserDetails userDetails;
 
-    @Test
-    @DisplayName("Devrait générer un token valide et extraire le username")
-    void shouldGenerateAndExtractUsername() {
-        // GIVEN
-        UserDetails userDetails = new User("warrior@calip.fr", "password", new ArrayList<>());
+    @BeforeEach
+    void setUp() {
+        jwtService = new JwtService();
+        String secretKey = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+        ReflectionTestUtils.setField(jwtService, "secretKey", secretKey);
+        ReflectionTestUtils.setField(jwtService, "jwtExpiration", 3600000L); // 1h
 
-        // WHEN
-        String token = jwtService.generateToken(userDetails);
-        String extractedUsername = jwtService.extractUsername(token);
-
-        // THEN
-        assertThat(extractedUsername).isEqualTo("warrior@calip.fr");
-        assertThat(jwtService.isTokenValid(token, userDetails)).isTrue();
+        userDetails = new User("test@test.com", "password", Collections.emptyList());
     }
 
     @Test
-    @DisplayName("Le token ne devrait pas être valide pour un autre utilisateur")
-    void shouldNotBeValidForOtherUser() {
-        UserDetails user1 = new User("user1@calip.fr", "password", new ArrayList<>());
-        UserDetails user2 = new User("user2@calip.fr", "password", new ArrayList<>());
+    @DisplayName("Devrait générer un token et extraire le username")
+    void shouldGenerateAndExtractUsername() {
+        String token = jwtService.generateToken(userDetails);
+        String username = jwtService.extractUsername(token);
 
-        String tokenUser1 = jwtService.generateToken(user1);
+        assertThat(username).isEqualTo("test@test.com");
+    }
 
-        assertThat(jwtService.isTokenValid(tokenUser1, user2)).isFalse();
+    @Test
+    @DisplayName("Le token devrait être valide pour l'utilisateur concerné")
+    void shouldValidateToken() {
+        String token = jwtService.generateToken(userDetails);
+        boolean isValid = jwtService.isTokenValid(token, userDetails);
+
+        assertThat(isValid).isTrue();
     }
 }

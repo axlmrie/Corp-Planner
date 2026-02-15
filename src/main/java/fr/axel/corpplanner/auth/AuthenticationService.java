@@ -6,7 +6,6 @@ import fr.axel.corpplanner.security.VerificationService;
 import fr.axel.corpplanner.security.domain.TokenType;
 import fr.axel.corpplanner.user.domain.Role;
 import fr.axel.corpplanner.user.domain.User;
-import fr.axel.corpplanner.user.repository.RoleRepository;
 import fr.axel.corpplanner.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,14 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -36,29 +36,24 @@ public class AuthenticationService {
             throw new RuntimeException("Cet email est déjà utilisé");
         }
 
-        Role defaultRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Rôle par défaut non trouvé"));
-
         var user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .jobTitle(request.getJobTitle())
-                .companyName(request.getCompanyName())
-                .roles(new java.util.HashSet<>(java.util.Set.of(defaultRole)))
+                .roles(new HashSet<>(Set.of(Role.EMPLOYEE)))
                 .enabled(false)
                 .build();
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        String code = verificationService.createToken(user, TokenType.ACTIVATION);
+        String code = verificationService.createToken(savedUser, TokenType.ACTIVATION);
+
         String htmlContent = "<h2>Bienvenue !</h2><p>Votre code d'activation est : <b>" + code + "</b></p>";
-        emailService.send(user.getEmail(), "Activation de votre compte", htmlContent);
+        emailService.send(savedUser.getEmail(), "Activation de votre compte", htmlContent);
 
         return "Compte créé. Veuillez l'activer avec le code envoyé par e-mail.";
     }
-
 
     @Transactional
     public void confirmActivation(String code) {

@@ -1,0 +1,49 @@
+# ===================================================================
+# CONFIGURATION GÉNÉRALE
+# ===================================================================
+spring.application.name=script-manager
+spring.profiles.active=dev
+server.port=8080
+
+# ===================================================================
+# BASE DE DONNÉES (PostgreSQL)
+# ===================================================================
+spring.datasource.url=jdbc:postgresql://localhost:5432/corpplanner_db
+spring.datasource.username=admin
+# Remplacer par votre mot de passe DB local
+spring.datasource.password=CHANGE_ME
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# ===================================================================
+# JPA / HIBERNATE
+# ===================================================================
+# En dev : 'update' pour créer les tables auto. En prod : 'validate' ou 'none'
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
+
+# ===================================================================
+# SÉCURITÉ & JWT
+# ===================================================================
+# Clé secrète pour signer les tokens (doit être longue et complexe, min 256 bits)
+application.security.jwt.secret-key=CHANGE_ME_METTRE_UNE_CLE_TRES_LONGUE_ICI_POUR_LA_SECURITE
+# Expiration du token en ms (ici 1 jour : 86400000)
+application.security.jwt.expiration=86400000
+
+# CORS : Liste des URLs front-end autorisées
+application.cors.allowed-origins=http://localhost:5173,http://localhost:4200
+
+# ===================================================================
+# EMAILING (Mailjet)
+# ===================================================================
+mailjet.api-key=CHANGE_ME_VOTRE_API_KEY
+mailjet.secret-key=CHANGE_ME_VOTRE_SECRET_KEY
+# L'adresse email validée dans votre compte Mailjet
+application.mail.from=no-reply@votre-domaine.com
+
+# ===================================================================
+# UPLOAD DE FICHIERS
+# ===================================================================
+# Dossier où seront stockées les images
+upload.directory=uploads
