@@ -1,15 +1,13 @@
 package fr.axel.corpplanner.user;
 
-
 import fr.axel.corpplanner.user.domain.Role;
 import fr.axel.corpplanner.user.domain.User;
 import fr.axel.corpplanner.user.dto.UserResponse;
 import fr.axel.corpplanner.user.dto.UserUpdateRequest;
-import fr.axel.corpplanner.user.repository.RoleRepository;
 import fr.axel.corpplanner.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,8 +16,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-
 
     public UserResponse updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
@@ -29,24 +25,36 @@ public class UserService {
             user.setEmail(request.getEmail());
         }
 
+        if (request.getFirstName() != null) {
+            user.setFirstName(request.getFirstName());
+        }
+
+        if (request.getLastName() != null) {
+            user.setLastName(request.getLastName());
+        }
+
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
-            Set<Role> newRoles = new HashSet<>();
-            for (String roleName : request.getRoles()) {
-                Role role = roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("Rôle " + roleName + " inexistant"));
-                newRoles.add(role);
-            }
+            Set<Role> newRoles = request.getRoles().stream()
+                    .map(roleName -> {
+                        try {
+                            return Role.valueOf(roleName);
+                        } catch (IllegalArgumentException e) {
+                            throw new RuntimeException("Rôle " + roleName + " inexistant. Rôles valides : ADMIN, EMPLOYEE");
+                        }
+                    })
+                    .collect(Collectors.toSet());
+
             user.setRoles(newRoles);
         }
 
         User userSaved = userRepository.save(user);
         return mapToResponse(userSaved);
     }
+
     public UserResponse mapToResponse(User user) {
         Set<String> roles = user.getRoles().stream()
-                .map(Role::name)
+                .map(Enum::name)
                 .collect(Collectors.toSet());
-
 
         return new UserResponse(
                 user.getId(),
@@ -62,7 +70,4 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
         return mapToResponse(user);
     }
-
-
-
 }
