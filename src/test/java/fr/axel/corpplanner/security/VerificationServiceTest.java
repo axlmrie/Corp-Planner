@@ -1,4 +1,4 @@
 package fr.axel.corpplanner.security;
 
-public class JwtServiceTest {
+public class VerificationServiceTest {
 }
