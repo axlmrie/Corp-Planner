@@ -1,0 +1,1 @@
+[![codecov](https://codecov.io/gh/axlmrie/Corp-Planner/graph/badge.svg?token=FT4AEV8ON8)](https://codecov.io/gh/axlmrie/Corp-Planner)
