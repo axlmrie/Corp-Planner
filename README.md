@@ -35,3 +35,41 @@ Ce projet utilise les standards modernes de l'écosystème Java :
 | **Outils** | Maven, Lombok, Swagger (OpenAPI 3), Docker |
 
 ---
+
+## 🚀 Installation et Démarrage
+
+Suivez ces étapes pour lancer l'API localement en quelques minutes.
+
+### 📋 Prérequis
+
+Assurez-vous d'avoir installé :
+* **Java 17** (ou version supérieure)
+* **Maven** 3.8+
+* **PostgreSQL** (Optionnel si vous utilisez le profil H2 pour le test rapide)
+* **Git**
+
+### 1️⃣ Cloner le dépôt
+
+```bash
+git clone [https://github.com/axlmrie/Corp-Planner.git](https://github.com/axlmrie/Corp-Planner.git)
+cd Corp-Planner
+```
+### 2️⃣ Configuration (Variables d'environnement)
+
+Pour des raisons de sécurité, les clés API et les mots de passe ne sont pas versionnés.
+Créez un fichier src/main/resources/application.properties (ou utilisez des variables d'environnement) avec les informations suivantes :
+
+```properties
+# --- Base de données (PostgreSQL) ---
+spring.datasource.url=jdbc:postgresql://localhost:5432/corp_planner_db
+spring.datasource.username=postgres
+spring.datasource.password=VOTRE_MOT_DE_PASSE
+
+# --- Sécurité (JWT) ---
+application.security.jwt.secret-key=VOTRE_CLE_SECRETE_TRES_LONGUE
+application.security.jwt.expiration=86400000
+
+# --- Emailing (Mailjet) ---
+mailjet.api-key=VOTRE_API_KEY_MAILJET
+mailjet.secret-key=VOTRE_SECRET_KEY_MAILJET
+```
