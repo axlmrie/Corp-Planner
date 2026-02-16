@@ -179,7 +179,7 @@ Chaque module métier (`user`, `booking`, `resource`) est structuré ainsi :
 
 **Axel Marie**
 
-* [GitHub](https://www.google.com/search?q=https://github.com/axlmrie)
-* [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/in/axel-marie/)
+* [GitHub](https://github.com/axlmrie)
+* [LinkedIn](https://www.linkedin.com/in/axel-marie/)
 
 ---
