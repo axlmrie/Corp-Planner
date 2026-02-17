@@ -183,3 +183,8 @@ Chaque module métier (`user`, `booking`, `resource`) est structuré ainsi :
 * [LinkedIn](https://www.linkedin.com/in/axel-marie/)
 
 ---
+
+## 📄 Licence
+
+Ce projet est distribué sous la licence **MIT**.  
+Voyez le fichier `LICENSE` pour plus d'informations.
